@@ -48,7 +48,7 @@ const envschema = Joi.object({
         .default("15m"),
 
     RATE_LIMIT_MAX: Joi.number().default(100),
-    RATE_LIMIT_DELAY: Joi.number().default(1000),
+    SPEED_LIMIT_DEALY: Joi.number().default(1000),
 
 
     //============
@@ -65,7 +65,7 @@ const envschema = Joi.object({
 
 
 //Valida el objeto process.env completo
-export function validareEnv(env = process.env){
+export function validateEnv(env = process.env){
     const { error, value } = envschema.validate(env, {
         abortEarly: false
     });
@@ -73,7 +73,7 @@ export function validareEnv(env = process.env){
     if(error){
         console.error("Error en archivo .env");
         error.details.forEach(d => console.error(" -", d.message));
-        process.exit(1);
+        process.exit(1);    
     }
 
     return value
