@@ -1,7 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const routes = require("./src/routes/router.get")
+const expressLayouts = require("express-ejs-layouts");
+const routes = require("./src/routes/router.get");
+const { join } = require("path");
 
 const app = express();
 
@@ -10,9 +12,12 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"))
 app.use(cookieParser());
+app.use(expressLayouts)
 
 //settings
 app.set("view engine", "ejs");
+app.set("views", join(__dirname, "src", "views"))
+app.set("Layout", "layout")
 
 //routes
 app.use("/", routes);
