@@ -59,7 +59,7 @@ const envschema = Joi.object({
         .default("debug"),
     
     LOG_FORMAT: Joi.string()
-        .valid("json","pretty", "text")
+        .valid("json","prettyPrint", "simple")
         .default("json"),
 }).unknown(true);
 
