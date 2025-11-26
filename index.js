@@ -1,5 +1,4 @@
-// package.json debe tener: "type": "module"
-
+import helmet from "helmet"; 
 import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -19,6 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(expressLayouts);
+app.use(helmet())
 app.use(express.static(join(__dirname, "src", "views")))
 
 // settings

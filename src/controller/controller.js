@@ -11,3 +11,4 @@ export const login = async (req, res)=>{
     console.log(email, password)
     res.json({email, password})
 }
+
