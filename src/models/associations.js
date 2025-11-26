@@ -1,0 +1,39 @@
+import { sequelize } from "../config/connect.db";
+import { exercises } from "./exercise";
+import { workout_session } from "./workout.session.js";
+import { workout_sets } from "./workout.set.js";
+import { users } from "./users.js";
+
+workout_session.belongsToMany(exercises, {
+    through: workout_sets,
+    foreignKey: "session_id",
+    otherKey: "exercise_id"
+})
+
+exercises.belongsToMany(workout_session,{
+    through: workout_sets,
+    foreignKey: "exercise_id",
+    otherKey: "session_id"
+})
+
+users.hasMany(exercises,{
+    foreignKey: "user_id",
+    sourceKey: "id",
+    onDelete: "CASCADE"
+});
+
+exercises.belongsTo(users,{
+    foreignKey: "user_id",
+    targetKey: "id"
+})
+
+users.hasMany(workout_session,{
+    foreignKey: "user_id",
+    sourceKey: "id",
+    onDelete: "CASCADE"
+})
+
+workout_session.belongsTo(users,{
+    foreignKey: "user_id",
+    targetKey: "id"
+})

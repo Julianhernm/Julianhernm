@@ -1,7 +1,7 @@
 import { sequelize } from "../config/connect.db.js";
 import { DataTypes } from "sequelize";
 
-export const exercises = sequelize.define("Exercises",{
+export const workout_session = sequelize.define("WorkoutSession",{
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -11,15 +11,15 @@ export const exercises = sequelize.define("Exercises",{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    name:{
-        type: DataTypes.STRING,
-        allowNull: false,
+    date:{
+        type: DataTypes.DATE,
+        allowNull: false
     },
     created_at:{
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     }
 },{
-    tableName: "exercises",
+    tableName: "workout_session",
     timestamps: false
 })
