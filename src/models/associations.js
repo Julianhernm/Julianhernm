@@ -1,4 +1,4 @@
-import { exercises } from "./exercise";
+import { exercises } from "./exercise.js";
 import { workout_session } from "./workout.session.js";
 import { workout_sets } from "./workout.set.js";
 import { users } from "./users.js";

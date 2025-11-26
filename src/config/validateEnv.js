@@ -71,7 +71,7 @@ export function validateEnv(env = process.env){
     });
 
     if(error){
-        console.error("Error en archivo .env");
+        console.error("Error en archivo .env")
         error.details.forEach(d => console.error(" -", d.message));
         process.exit(1);    
     }
