@@ -1,7 +1,5 @@
 import { sequelize } from "../config/connect.db.js";
 import { DataTypes } from "sequelize";
-import { exercises } from "./exercise.js";
-import { workout_session } from "./workout.session.js";
 
 export const users = sequelize.define("User",{
     id: {
