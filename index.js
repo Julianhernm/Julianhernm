@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import {sequelize} from "./src/config/connect.db.js";
 import { config } from "./src/config/env.js";
-import "./src/models/associations.js"
+import "./src/models/associations.js";
 
 // reconstruir __dirname en ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -82,6 +82,8 @@ app.set("layout", "./layouts/main");
 // routes
 
 app.use("/", routes);
+
+console.log("hola")
 
 
 app.listen(process.env.PORT || 3000, async () =>{

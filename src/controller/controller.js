@@ -1,4 +1,5 @@
 
-export const login = (req, res)=>{
+
+export const login =  (req, res)=>{
     res.render("pages/login", {layout: false})
 }
