@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { validateEnv } from "./validateEnv.js";
 
-const env = validateEnv();
+export const env = validateEnv();
 
 export const config = {
     app: {

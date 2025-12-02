@@ -1,48 +1,360 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro | Gimnasio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/style.css">
+    <title>Registro - Power Gym</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheet/style.register.css">
 </head>
+
+
 <body>
-    <div class="register-container">
-        <h2 class="title">REGISTRO DE MIEMBROS</h2>
-        
-        <form class="register-form" id="registerForm">
-            <div class="input-group">
+    <div class="login-container">
+        <div class="logo">
+            <h1>Power Gym</h1>
+            <p>Únete a nuestra comunidad fitness</p>
+        </div>
+
+        <form id="registerForm">
+            <div id="messageContainer"></div>
+
+            <div class="form-group">
                 <label for="name">Nombre Completo</label>
-                <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                <input name="name" type="text" id="name" placeholder="Ingresa tu nombre completo" required>
             </div>
 
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="tu.email@ejemplo.com" required>
+            <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <input name="email" type="email" id="email" placeholder="ejemplo@correo.com" required>
             </div>
-            
-            <div class="input-group">
+
+            <div class="form-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-                <small id="passwordHelp" class="help-text"></small>
+                <input name="password" type="password" id="password" placeholder="Crea una contraseña segura" required>
+                <button type="button" class="password-toggle" id="togglePassword">
+                    <i class="far fa-eye"></i>
+                </button>
+
+                <div class="password-strength" id="passwordStrength">
+                    <i class="fas fa-info-circle"></i>
+                    <span>La contraseña debe tener al menos 8 caracteres</span>
+                </div>
+
+                <div class="requirement" id="lengthReq">
+                    <i class="far fa-circle"></i>
+                    Mínimo 8 caracteres
+                </div>
+                <div class="requirement" id="uppercaseReq">
+                    <i class="far fa-circle"></i>
+                    Al menos una mayúscula
+                </div>
+                <div class="requirement" id="numberReq">
+                    <i class="far fa-circle"></i>
+                    Al menos un número
+                </div>
             </div>
-            
-            <div class="input-group">
+
+            <div class="form-group">
                 <label for="confirmPassword">Confirmar Contraseña</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
-                <small id="confirmPasswordHelp" class="help-text"></small>
+                <input name="confirmPassword" type="password" id="confirmPassword" placeholder="Repite tu contraseña"
+                    required>
+                <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                    <i class="far fa-eye"></i>
+                </button>
+
+                <div class="password-match" id="passwordMatch">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Las contraseñas deben coincidir</span>
+                </div>
             </div>
-            
-            <button type="submit" class="btn-register">REGISTRARME</button>
+
+            <button type="submit" class="btn-login" id="registerButton">
+                <span id="buttonText">Crear Cuenta</span>
+            </button>
+
+            <div class="links-container">
+                <a href="/login">¿Ya tienes una cuenta?</a>
+                <a href="#">Términos y Condiciones</a>
+            </div>
+
+            <div class="divider">
+                <span>O regístrate con</span>
+            </div>
+
+            <div class="social-login">
+                <div class="social-btn">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="social-btn">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="social-btn">
+                    <i class="fab fa-linkedin-in"></i>
+                </div>
+            </div>
         </form>
-        
-        <div class="links-group">
-            <a href="login.html" class="link-secondary">¿Ya tienes una cuenta? Inicia Sesión</a>
-        </div>
-        
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const registerForm = document.getElementById('registerForm');
+            const messageContainer = document.getElementById('messageContainer');
+            const registerButton = document.getElementById('registerButton');
+            const buttonText = document.getElementById('buttonText');
+            const togglePassword = document.getElementById('togglePassword');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const emailInput = document.getElementById('email');
+            const nameInput = document.getElementById('name');
+
+            // Elementos para validación de contraseña
+            const passwordStrength = document.getElementById('passwordStrength');
+            const passwordMatch = document.getElementById('passwordMatch');
+            const lengthReq = document.getElementById('lengthReq');
+            const uppercaseReq = document.getElementById('uppercaseReq');
+            const numberReq = document.getElementById('numberReq');
+
+            // Función para mostrar mensajes
+            function showMessage(message, type = 'info') {
+                // Eliminar mensaje anterior si existe
+                const existingMessage = messageContainer.querySelector('.login-message');
+                if (existingMessage) {
+                    existingMessage.classList.add('message-slide-out');
+                    setTimeout(() => {
+                        existingMessage.remove();
+                    }, 300);
+                }
+
+                // Crear nuevo mensaje
+                const messageElement = document.createElement('div');
+                messageElement.className = `login-message ${type} message-slide-in`;
+                messageElement.textContent = message;
+                messageContainer.appendChild(messageElement);
+
+                // Auto-eliminar mensajes de éxito después de 3 segundos
+                if (type === 'success') {
+                    setTimeout(() => {
+                        if (messageElement.parentNode) {
+                            messageElement.classList.add('message-slide-out');
+                            setTimeout(() => {
+                                messageElement.remove();
+                            }, 300);
+                        }
+                    }, 3000);
+                }
+            }
+
+            // Función para mostrar/ocultar contraseña
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+            });
+
+            // Función para mostrar/ocultar confirmación de contraseña
+            toggleConfirmPassword.addEventListener('click', function () {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+            });
+
+            // Validación de fortaleza de contraseña en tiempo real
+            passwordInput.addEventListener('input', function () {
+                const password = this.value;
+
+                // Validar longitud
+                const hasLength = password.length >= 8;
+                updateRequirement(lengthReq, hasLength);
+
+                // Validar mayúsculas
+                const hasUppercase = /[A-Z]/.test(password);
+                updateRequirement(uppercaseReq, hasUppercase);
+
+                // Validar números
+                const hasNumber = /[0-9]/.test(password);
+                updateRequirement(numberReq, hasNumber);
+
+                // Actualizar mensaje de fortaleza
+                if (password.length === 0) {
+                    passwordStrength.innerHTML = '<i class="fas fa-info-circle"></i><span>La contraseña debe tener al menos 8 caracteres</span>';
+                } else if (hasLength && hasUppercase && hasNumber) {
+                    passwordStrength.innerHTML = '<i class="fas fa-check-circle" style="color:#4caf50"></i><span>Contraseña segura</span>';
+                } else {
+                    passwordStrength.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#ff9800"></i><span>Contraseña débil</span>';
+                }
+            });
+
+            // Validación de coincidencia de contraseñas en tiempo real
+            confirmPasswordInput.addEventListener('input', function () {
+                const password = passwordInput.value;
+                const confirmPassword = this.value;
+
+                if (confirmPassword.length === 0) {
+                    passwordMatch.innerHTML = '<i class="fas fa-info-circle"></i><span>Las contraseñas deben coincidir</span>';
+                    passwordMatch.classList.remove('valid', 'invalid');
+                } else if (password === confirmPassword) {
+                    passwordMatch.innerHTML = '<i class="fas fa-check-circle"></i><span>Las contraseñas coinciden</span>';
+                    passwordMatch.classList.add('valid');
+                    passwordMatch.classList.remove('invalid');
+                } else {
+                    passwordMatch.innerHTML = '<i class="fas fa-times-circle"></i><span>Las contraseñas no coinciden</span>';
+                    passwordMatch.classList.add('invalid');
+                    passwordMatch.classList.remove('valid');
+                }
+            });
+
+            // Función para actualizar los requisitos de contraseña
+            function updateRequirement(element, isValid) {
+                if (isValid) {
+                    element.innerHTML = '<i class="fas fa-check-circle"></i>' + element.textContent;
+                    element.classList.add('valid');
+                    element.classList.remove('invalid');
+                } else {
+                    element.innerHTML = '<i class="far fa-circle"></i>' + element.textContent;
+                    element.classList.add('invalid');
+                    element.classList.remove('valid');
+                }
+            }
+
+            // Función para crear efecto de confeti
+            function createConfetti() {
+                const container = document.querySelector('.login-container');
+                const colors = ['#ff7e5f', '#feb47b', '#4caf50', '#2196f3', '#ffeb3b'];
+
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animation = `confettiRain ${Math.random() * 3 + 2}s linear forwards`;
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(confetti);
+
+                    // Eliminar confeti después de la animación
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+
+            // Función para validar contraseña
+            function validatePassword(password) {
+                const hasLength = password.length >= 8;
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasNumber = /[0-9]/.test(password);
+
+                return hasLength && hasUppercase && hasNumber;
+            }
+
+            // Función para simular registro
+            function simulateRegister(name, email, password) {
+                return new Promise((resolve) => {
+                    // Simular tiempo de respuesta del servidor
+                    setTimeout(() => {
+                        // Simular que el registro es exitoso
+                        resolve({ success: true });
+                    }, 1500);
+                });
+            }
+
+            // Manejar envío del formulario
+            registerForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                // Validación básica
+                if (!name || !email || !password || !confirmPassword) {
+                    showMessage('Por favor, completa todos los campos', 'error');
+                    return;
+                }
+
+                // Validación de formato de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showMessage('Por favor, ingresa un correo electrónico válido', 'error');
+                    return;
+                }
+
+                // Validación de contraseña
+                if (!validatePassword(password)) {
+                    showMessage('La contraseña no cumple con los requisitos de seguridad', 'error');
+                    return;
+                }
+
+                // Validación de coincidencia de contraseñas
+                if (password !== confirmPassword) {
+                    showMessage('Las contraseñas no coinciden', 'error');
+                    return;
+                }
+
+                // Mostrar estado de carga
+                registerButton.disabled = true;
+                buttonText.innerHTML = '<span class="spinner"></span> Creando cuenta...';
+
+                try {
+                    //Enviar credenciales de usuario al backend
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData)
+
+                    const res = await fetch("/api/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await res.json()
+                    console.log(result)
+                    if (!result.success){
+                        showMessage('Error al crear la cuenta. Inténtalo de nuevo.', 'error');
+                        registerButton.disabled = false;
+                        buttonText.textContent = 'Crear Cuenta';
+                        return false
+                    }
+                        // Mostrar mensaje de éxito después de 1 segundo
+                        setTimeout(() => {
+                            showMessage('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
+                            registerButton.classList.add('success-pulse');
+                            createConfetti();
+
+                            // Simular redirección después de 2 segundos
+                            setTimeout(() => {
+                                showMessage('¡Bienvenido a Power Gym!', 'success');
+                                window.location.href = '/home';
+                            }, 2000);
+                        }, 1000)
+                } catch (error) {
+                    showMessage('Error de conexión. Inténtalo de nuevo.', 'error');
+                    registerButton.disabled = false;
+                    buttonText.textContent = 'Crear Cuenta';
+                    console.error(error)
+                }
+            });
+
+            // Agregar animación de shake para errores
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
 </body>
+
 </html>

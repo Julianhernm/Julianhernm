@@ -1,13 +1,30 @@
 import { users } from "../models/users.js";
+import { logger } from "../config/logging.js";
 
 export const verify = async (email) => {
+
     try {
-        const result = await users.findOne({
+        return await users.findOne({
             where: {email},
             attributes: ["email", "password_hash", "id"]
         })
-        return result
+
     } catch (error) {
-        throw new Error("error al consultar")
+        logger.error("error al consultar")
+        throw console.error(error)
+    }
+}
+
+export const registerUser = async (name, email, password)=>{
+
+    try {
+        return await users.create({
+            name,
+            email, 
+            password_hash: password
+        })
+    } catch (error) {
+        logger.error("error al consultar")
+        throw console.error(error)
     }
 }

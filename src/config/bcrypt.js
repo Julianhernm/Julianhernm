@@ -9,5 +9,6 @@ export async function hashPassword(password) {
 
 //compara contraseña encriptada
 export async function comparePassword(password, compareHash) {
-    return await bcrypt.compare(password, hashPassword);
+    const result =  await bcrypt.compare(password, compareHash);
+    return result
 }

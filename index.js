@@ -2,7 +2,8 @@ import express, { urlencoded } from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import expressLayouts from "express-ejs-layouts";
-import routes from "./src/routes/router.get.js"; 
+import routes from "./src/routes/router.get.js";
+import routerAuth from "./src/routes/router.auth.js"
 import ms from "ms";
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit"
@@ -11,8 +12,8 @@ import cors from "cors"
 import { logger } from "./src/config/logging.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import {sequelize} from "./src/config/connect.db.js";
 import { config } from "./src/config/env.js";
+import { initDB } from "./src/config/connect.db.js";
 import "./src/models/associations.js";
 
 // reconstruir __dirname en ESM
@@ -45,7 +46,7 @@ const configHel = {
 //config cors
 const configCors= {
   origin:(origin, callback)=>{
-    const allowed = config.security.corsOrigin.split(",");
+    const allowed = config.security.corsOrigin;
 
     if(!origin || allowed.includes(origin)){
       callback(null, true);
@@ -79,17 +80,14 @@ app.set("view engine", "ejs");
 app.set("views", join(__dirname, "src", "views"));
 app.set("layout", "./layouts/main");
 
-// routes
+//initialize DB
+initDB()
 
+// routes
+app.use("/api", routerAuth)
 app.use("/", routes);
 
-console.log("hola")
 
 
-app.listen(process.env.PORT || 3000, async () =>{
-  logger.info(`Server on port ${process.env.PORT || 3000}`)
-  await sequelize.sync({force: false})
-  await sequelize.authenticate()
-}
-);
+app.listen(process.env.PORT || 3000, async () => logger.info(`Server on port ${process.env.PORT || 3000}`));
 

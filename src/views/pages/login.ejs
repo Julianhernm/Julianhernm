@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Tu Gimnasio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <title>Login - Power Gym</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheet/style.register.css">
 </head>
 <body>
     <div class="login-container">
@@ -13,38 +17,45 @@
             <h1>Power Gym</h1>
             <p>Transforma tu cuerpo, transforma tu vida</p>
         </div>
-        
+
         <form id="loginForm">
+            <div id="messageContainer"></div>
+
             <div class="form-group">
-                <label for="email" >Correo Electrónico</label>
+                <label for="email">Correo Electrónico</label>
                 <input name="email" type="email" id="email" placeholder="ejemplo@correo.com" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="password">Contraseña</label>
                 <input name="password" type="password" id="password" placeholder="Ingresa tu contraseña" required>
+                <button type="button" class="password-toggle" id="togglePassword">
+                    <i class="far fa-eye"></i>
+                </button>
             </div>
-            
-            <button type="submit" class="btn-login">Iniciar Sesión</button>
-            
+
+            <button type="submit" class="btn-login" id="loginButton">
+                <span id="buttonText">Iniciar Sesión</span>
+            </button>
+
             <div class="links-container">
-                <a href="#">¿Ya tienes una cuenta?</a>
-                <a href="#">¿Olvidaste tu contraseña?</a>
+                <a href="/register">¿No tienes una cuenta?</a>
+                <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
             </div>
-            
+
             <div class="divider">
                 <span>O continúa con</span>
             </div>
-            
+
             <div class="social-login">
                 <div class="social-btn">
-                    <i>f</i> <!-- Facebook -->
+                    <i class="fab fa-facebook-f"></i>
                 </div>
                 <div class="social-btn">
-                    <i>G</i> <!-- Google -->
+                    <i class="fab fa-google"></i>
                 </div>
                 <div class="social-btn">
-                    <i>in</i> <!-- LinkedIn -->
+                    <i class="fab fa-linkedin-in"></i>
                 </div>
             </div>
         </form>
@@ -52,33 +63,28 @@
 
     <script>
         const form = document.getElementById("loginForm");
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        
+        form.addEventListener("submit", async (e)=>{
+            e.preventDefault()
+
+            const dataForm = new FormData(e.target);
+            const data = Object.fromEntries(dataForm);
+
+            const res = await fetch("/api/login", {
+                method: "post",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data),
+                credentials: "include"
+            })
             
-            const formData = new FormData(form)
-            const data = {
-                email: formData.get("email"),
-                password: formData.get("password")
-            }            
-            
-            try {
-                const res = await fetch("/login",{
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                })
+            const result = await res.json()
+            if(!result.success) return false;
 
-                if(!res.ok) throw new Error("Error en el login")
-
-                const result = await res.json()
-                console.log(result)
-            } catch (error) {
-                console.error("Error ", error);
-            }
-
-        });
+            window.location.href = "/home"
+        })
     </script>
 </body>
+
 </html>
