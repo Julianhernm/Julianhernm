@@ -14,6 +14,7 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { config } from "./src/config/env.js";
 import { initDB } from "./src/config/connect.db.js";
+import routerLogic from "./src/routes/router.logic.js"
 import "./src/models/associations.js";
 
 // reconstruir __dirname en ESM
@@ -85,8 +86,8 @@ initDB()
 
 // routes
 app.use("/api", routerAuth)
+app.use("/api-logic", routerLogic)
 app.use("/", routes);
-
 
 
 app.listen(process.env.PORT || 3000, async () => logger.info(`Server on port ${process.env.PORT || 3000}`));

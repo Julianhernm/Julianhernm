@@ -8,7 +8,8 @@ export const sequelize = new Sequelize(
     config.database.password,
     {
         host: config.database.host,
-        dialect: "mysql"
+        dialect: "mysql",
+        timezone: "-06:00"
     }
 )
 
@@ -24,3 +25,4 @@ export const initDB = async()=>{
         console.error(error)
     }
 }
+
