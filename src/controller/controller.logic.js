@@ -1,13 +1,13 @@
-import { addExercise } from "../repositories/exercises.repository.js";
+import { addExercise, destroyExercises } from "../repositories/exercises.repository.js";
 import {createWorkoutSession } from "../repositories/workout.repository.js";
 
 export const add = async (req, res) => {
-    const { user_id, name, created_at } = req.body;
+    const { name } = req.body;
 
     try {
         const dateNow = new Date()
-        const result = await addExercise(user_id, name, dateNow)
-        res.status(200).json({ message: "succesfully", result })
+        const result = await addExercise(   20, name, dateNow)
+        res.status(200).json({ message: "successfully", result })
     } catch (error) {
         console.error(error)
         res.json({ message: "Server Error" })
@@ -16,7 +16,7 @@ export const add = async (req, res) => {
 
 export const createSessionController = async (req, res) => {
     try {
-        const userId = 7;
+        const userId = req.user.id;
         const { exercises } = req.body
 
         const session = await createWorkoutSession(userId, exercises)
@@ -27,4 +27,19 @@ export const createSessionController = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: error.message})
     }
+}
+
+export const deleteExerciseController = async (req, res)=>{
+    const {id, name} = req.body;
+     try {
+        const result = await destroyExercises(id, name)
+        
+        if(!result) res.status(404).json({message: "item not found"});
+
+        res.status(200).json({message: "Deleted successfully", data:{id, name}})
+
+     } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Server Error"})
+     }
 }

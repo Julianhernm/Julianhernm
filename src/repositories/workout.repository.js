@@ -5,7 +5,6 @@ import { logger } from "../config/logging.js";
 
 export const createWorkoutSession = async (userId, exercises) => {
     const transaction = await sequelize.transaction();
-    logger.info("passed")
     try {
         const date = new Date();
         const session = await workout_session.create(

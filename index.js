@@ -47,7 +47,11 @@ const configHel = {
 //config cors
 const configCors= {
   origin:(origin, callback)=>{
-    const allowed = config.security.corsOrigin;
+    const allowed = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+];
+
 
     if(!origin || allowed.includes(origin)){
       callback(null, true);
@@ -58,7 +62,7 @@ const configCors= {
   methods: ["GET", "POST","DELETE", "PATCH", "PUT"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
-  maxAge: 600
+  maxAge: 6000000
 }
 
 const app = express();
@@ -91,4 +95,3 @@ app.use("/", routes);
 
 
 app.listen(process.env.PORT || 3000, async () => logger.info(`Server on port ${process.env.PORT || 3000}`));
-

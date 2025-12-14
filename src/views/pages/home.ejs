@@ -1,15 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Eliminar ejercicio</title>
 </head>
-
 <body>
-    <h1>Felicidades...</h1>
-    <h3>Pasaste la prueba</h3>
-</body>
+  <h1>Eliminar ejercicio</h1>
 
+  <form id="deleteForm">
+    <label for="id">ID:</label>
+    <input type="number" id="id" name="id" required><br><br>
+
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <button type="submit">Eliminar</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('deleteForm');
+    const responseMsg = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById('id').value;
+      const name = document.getElementById('name').value;
+
+      try {
+        const res = await fetch('http://localhost:3000/api-logic/delete-exercise', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id, name })
+        });
+
+        const data = await res.json();
+        responseMsg.textContent = `${data.message} → ${JSON.stringify(data.data)}`;
+      } catch (error) {
+        responseMsg.textContent = 'Error en la petición';
+        console.error(error);
+      }
+    });
+  </script>
+</body>
 </html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitApp - Tu aplicación de entrenamiento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header con saludo */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+        }
+        
+        .greeting {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .client-name {
+            color: #60a5fa;
+        }
+        
+        /* Navegación */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e293b;
+            padding: 18px 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 1px solid #334155;
+        }
+        
+        .app-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .app-name i {
+            color: #8b5cf6;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-btn {
+            background-color: #334155;
+            color: #e2e8f0;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background-color: #475569;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.contact {
+            background-color: #3b82f6;
+        }
+        
+        .nav-btn.logout {
+            background-color: #ef4444;
+        }
+        
+        .nav-btn.contact:hover {
+            background-color: #2563eb;
+        }
+        
+        .nav-btn.logout:hover {
+            background-color: #dc2626;
+        }
+        
+        /* Carrusel de sesiones */
+        .sessions-section {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .sessions-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sessions-carousel {
+            flex: 1;
+            background-color: #1e293b;
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid #334155;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 20px;
+        }
+        
+        .session-card {
+            min-width: 300px;
+            background: linear-gradient(145deg, #2d3748, #1e293b);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #475569;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .session-card h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .session-card h3 i {
+            color: #8b5cf6;
+        }
+        
+        .exercise-list {
+            list-style-type: none;
+        }
+        
+        .exercise-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .exercise-item:last-child {
+            border-bottom: none;
+        }
+        
+        .exercise-item i {
+            color: #10b981;
+        }
+        
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .carousel-btn {
+            background-color: #334155;
+            color: #e2e8f0;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-btn:hover {
+            background-color: #475569;
+            transform: scale(1.1);
+        }
+        
+        /* Botón de añadir sesión */
+        .add-session {
+            flex: 0 0 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            border: 2px dashed #475569;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .add-session:hover {
+            border-color: #3b82f6;
+            background: linear-gradient(145deg, #1e293b, #1a202c);
+            transform: translateY(-5px);
+        }
+        
+        .add-icon {
+            font-size: 5rem;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        
+        .add-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        
+        /* Responsividad */
+        @media (max-width: 992px) {
+            .sessions-section {
+                flex-direction: column;
+            }
+            
+            .add-session {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .greeting {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .session-card {
+                min-width: 280px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .greeting {
+                font-size: 1.8rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header con saludo personalizado -->
+        <header class="header">
+            <div class="greeting">
+                ¡Hola, <span class="client-name">Alex</span>! ¿Listo para entrenar hoy?
+            </div>
+        </header>
+        
+        <!-- Barra de navegación -->
+        <nav class="navbar">
+            <div class="app-name">
+                <i class="fas fa-dumbbell"></i>
+                FitApp
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn contact">
+                    <i class="fas fa-envelope"></i> Contact
+                </button>
+                <button class="nav-btn logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Sección de sesiones -->
+        <section class="sessions-section">
+            <!-- Carrusel de sesiones -->
+            <div class="sessions-carousel">
+                <h2 class="sessions-title">
+                    <i class="fas fa-calendar-alt"></i> Tus sesiones de entrenamiento
+                </h2>
+                
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Sesión 1 -->
+                        <div class="session-card">
+                            <h3><i class="fas fa-running"></i> Día de pierna</h3>
+                            <ul class="exercise-list">
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Sentadillas: 4x12
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Elevaciones de rodilla: 3x15
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Peso muerto: 4x10
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Extensiones de pierna: 3x12
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Sesión 2 -->
+                        <div class="session-card">
+                            <h3><i class="fas fa-dumbbell"></i> Día de pecho y tríceps</h3>
+                            <ul class="exercise-list">
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Press de banca: 4x8
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Fondos en paralelas: 3x10
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Aperturas con mancuernas: 3x12
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Extensiones de tríceps: 4x12
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Sesión 3 -->
+                        <div class="session-card">
+                            <h3><i class="fas fa-hiking"></i> Día de espalda y bíceps</h3>
+                            <ul class="exercise-list">
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Dominadas: 4x8
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Remo con barra: 4x10
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Curl de bíceps: 3x12
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Jalón al pecho: 3x12
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Sesión 4 -->
+                        <div class="session-card">
+                            <h3><i class="fas fa-heartbeat"></i> Día de cardio</h3>
+                            <ul class="exercise-list">
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Trote suave: 20 min
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Sprints: 10x30 seg
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Salto de cuerda: 15 min
+                                </li>
+                                <li class="exercise-item">
+                                    <i class="fas fa-check-circle"></i> Burpees: 4x10
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Controles del carrusel -->
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Botón para añadir nueva sesión -->
+            <div class="add-session" id="addSessionBtn">
+                <div class="add-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="add-text">Añadir nueva sesión</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Funcionalidad del carrusel
+        document.addEventListener('DOMContentLoaded', function() {
+            const carouselTrack = document.getElementById('carouselTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const sessionCards = document.querySelectorAll('.session-card');
+            const addSessionBtn = document.getElementById('addSessionBtn');
+            
+            let currentIndex = 0;
+            const cardWidth = 320; // Ancho de la tarjeta + gap
+            
+            // Actualizar posición del carrusel
+            function updateCarousel() {
+                carouselTrack.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+            }
+            
+            // Botón siguiente
+            nextBtn.addEventListener('click', function() {
+                const maxIndex = sessionCards.length - 1;
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+            
+            // Botón anterior
+            prevBtn.addEventListener('click', function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+            
+            // Botón para añadir nueva sesión
+            addSessionBtn.addEventListener('click', function() {
+                // Crear una nueva sesión de ejemplo
+                const newSessionCard = document.createElement('div');
+                newSessionCard.className = 'session-card';
+                newSessionCard.innerHTML = `
+                    <h3><i class="fas fa-plus-circle"></i> Nueva sesión</h3>
+                    <ul class="exercise-list">
+                        <li class="exercise-item">
+                            <i class="fas fa-dumbbell"></i> Agrega ejercicios aquí
+                        </li>
+                        <li class="exercise-item">
+                            <i class="fas fa-dumbbell"></i> Configura series y repeticiones
+                        </li>
+                        <li class="exercise-item">
+                            <i class="fas fa-dumbbell"></i> Personaliza tu entrenamiento
+                        </li>
+                    </ul>
+                `;
+                
+                // Agregar la nueva tarjeta al carrusel
+                carouselTrack.appendChild(newSessionCard);
+                
+                // Mover el carrusel a la nueva tarjeta
+                currentIndex = sessionCards.length;
+                updateCarousel();
+                
+                // Mostrar mensaje de confirmación
+                alert('¡Nueva sesión creada! Ahora puedes personalizarla con tus ejercicios.');
+            });
+            
+            // Funcionalidad de los botones de navegación
+            document.querySelector('.nav-btn.contact').addEventListener('click', function() {
+                alert('Función de contacto: Envía un correo a soporte@fitapp.com');
+            });
+            
+            document.querySelector('.nav-btn.logout').addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                    alert('Sesión cerrada. ¡Vuelve pronto!');
+                    // En una aplicación real, aquí se redirigiría al login
+                }
+            });
+            
+            // Inicializar carrusel
+            updateCarousel();
+        });
+    </script>
+</body>
+</html>
