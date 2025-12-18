@@ -11,10 +11,6 @@ export const workout_sets = sequelize.define("WorkoutSets",{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    exercises_id:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     reps:{
         type: DataTypes.INTEGER,
         allowNull: false

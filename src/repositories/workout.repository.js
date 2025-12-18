@@ -1,7 +1,6 @@
 import { workout_sets } from "../models/workout.set.js";
 import { workout_session } from "../models/workout.session.js"
 import { sequelize } from "../config/connect.db.js";
-import { logger } from "../config/logging.js";
 
 export const createWorkoutSession = async (userId, exercises) => {
     const transaction = await sequelize.transaction();
@@ -36,3 +35,4 @@ export const createWorkoutSession = async (userId, exercises) => {
         console.error(error)
     }
 }
+

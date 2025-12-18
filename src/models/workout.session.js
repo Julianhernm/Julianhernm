@@ -18,6 +18,10 @@ export const workout_session = sequelize.define("WorkoutSession",{
     created_at:{
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    deleted_at:{
+        type: DataTypes.BOOLEAN,
+        allowNull: true
     }
 },{
     tableName: "workout_session",

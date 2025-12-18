@@ -2,6 +2,9 @@ import { exercises } from "./exercise.js";
 import { workout_session } from "./workout.session.js";
 import { workout_sets } from "./workout.set.js";
 import { users } from "./users.js";
+import { templateExercises } from "./template.exercises.js"
+import { templateSets } from "./template.sets.js";
+import { templateWorkout } from "./template.workout.js";
 
 workout_session.belongsToMany(exercises, {
     through: workout_sets,
@@ -53,9 +56,43 @@ exercises.hasMany(workout_sets,{
     foreignKey: "exercise_id"
 })
 
+
+//template
+users.hasMany(templateWorkout,{
+    foreignKey: "user_id"
+})
+
+templateWorkout.belongsTo(users,{
+    foreignKey: "user_id",
+    targetKey: "id"
+})
+
+
+templateWorkout.hasMany(templateExercises,{
+    foreignKey: "id_workout"
+})
+
+templateExercises.belongsTo(templateWorkout,{
+    foreignKey: "id_workout",
+    targetKey: "id"
+})
+
+templateExercises.hasMany(templateSets, {
+    foreignKey: "template_exercises_id"
+})
+
+templateSets.belongsTo(templateExercises,{
+    foreignKey: "template_exercises_id",
+    targetKey: "id"
+})
+
+
 export {
     exercises,
     workout_session,
     workout_sets,
-    users
+    users,
+    templateExercises,
+    templateWorkout,
+    templateSets
 }

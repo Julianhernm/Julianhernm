@@ -18,11 +18,10 @@ export const initDB = async()=>{
         await sequelize.authenticate();
         logger.info("successful connection to the DB");
 
-        await sequelize.sync({alter: false});
+        await sequelize.sync({alter: true});
         logger.info("synchronized models");
     } catch (error) {
         logger.error("Error connecting to DB")
         console.error(error)
     }
 }
-
