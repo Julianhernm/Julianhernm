@@ -1,21 +1,99 @@
-// Lógica simple para tabs
+// ===============================
+// DATA SIMULADA (BACKEND MOCK)
+// ===============================
+const dataByTab = {
+  workouts: [
+    {
+      title: "Sentadilla con Barra",
+      sets: "4 series",
+      last: "Último: 100kg",
+      icon: "ph-barbell"
+    },
+    {
+      title: "Press Banca",
+      sets: "3 series",
+      last: "Último: 80kg",
+      icon: "ph-barbell"
+    }
+  ],
+  exercises: [
+    {
+      title: "Curl Bíceps",
+      sets: "4 series",
+      last: "Último: 20kg",
+      icon: "ph-dumbbell"
+    },
+    {
+      title: "Extensión de Tríceps",
+      sets: "3 series",
+      last: "Último: 25kg",
+      icon: "ph-dumbbell"
+    }
+  ],
+  stats: [
+    {
+      title: "Progreso Mensual",
+      sets: "↑ 12%",
+      last: "Últimos 30 días",
+      icon: "ph-chart-line-up"
+    }
+  ]
+};
+
+//Render Dinamico
+function renderList(items) {
+  const listView = document.getElementById("listView");
+  listView.innerHTML = "";
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "list-item";
+
+    div.innerHTML = `
+      <div class="list-info">
+        <div class="list-icon">
+          <i class="ph ${item.icon}"></i>
+        </div>
+        <div class="item-text">
+          <h4>${item.title}</h4>
+          <span>${item.sets} • ${item.last}</span>
+        </div>
+      </div>
+      <div class="list-action">
+        <i class="ph ph-caret-right"></i>
+      </div>
+    `;
+
+    listView.appendChild(div);
+  });
+}
+
+// ===============================
+// SWITCH DE TABS
+// ===============================
 function switchTab(element, tabName) {
-  // Remover clase active de todos los tabs
-  document.querySelectorAll('.nav-tab-item').forEach(item => {
-    item.classList.remove('active');
+  document.querySelectorAll(".nav-tab-item").forEach(item => {
+    item.classList.remove("active");
   });
 
-  // Añadir active al clickeado
-  element.classList.add('active');
+  element.classList.add("active");
 
-  // Simulación de cambio de contenido (fade effect)
-  const list = document.getElementById('listView');
-  list.style.opacity = '0.5';
+  const listView = document.getElementById("listView");
+  listView.style.opacity = "0";
+
   setTimeout(() => {
-    list.style.opacity = '1';
-    // Aquí cargarías los datos reales
+    renderList(dataByTab[tabName]);
+    listView.style.opacity = "1";
   }, 200);
 }
+
+//carga inicial
+document.addEventListener("DOMContentLoaded", () => {
+  renderList(dataByTab.workouts);
+});
+
+
+
 
 // Función para insertar elementos
 async function addInnerHTML() {
