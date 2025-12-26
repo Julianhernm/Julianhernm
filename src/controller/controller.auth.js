@@ -22,8 +22,8 @@ export const login = async (req, res) => {
         if (!isMatch) return res.status(401).json({ success: false, message: "Email or password incorrect" });
 
         // crear tokens
-        const accessToken = await signAccessToken({ email: user.email, userId: user.id });
-        const refreshToken = await signRefreshToken({ email: user.email, userId: user.id });
+        const accessToken = await signAccessToken({ name: user.name ,email: user.email, userId: user.id });
+        const refreshToken = await signRefreshToken({name: user.name, email: user.email, userId: user.id });
 
         // guardar tokens en cookies
         res.cookie("accessToken", accessToken, {
@@ -66,8 +66,8 @@ export const register = async (req, res) => {
         const newUser = await registerUser(name, email, passwordHash);
 
         // crear tokens
-        const accessToken = await signAccessToken({ email: newUser.email, userId: newUser.id });
-        const refreshToken = await signRefreshToken({ email: newUser.email, userId: newUser.id });
+        const accessToken = await signAccessToken({name: newUser.name,email: newUser.email, userId: newUser.id });
+        const refreshToken = await signRefreshToken({name: newUser.name,email: newUser.email, userId: newUser.id });
 
         // guardar tokens en cookies
         res.cookie("refreshToken", refreshToken, {
@@ -91,6 +91,7 @@ export const register = async (req, res) => {
             accessToken,
             expiresIn: ms(config.jwt.access.expiresIn),
             user: {
+                name: newUser.name,
                 id: newUser.id,
                 email: newUser.email
             }
@@ -120,7 +121,7 @@ export const authMiddleware = async (req, res, next) => {
             secure: false,
             sameSite: "lax"
         };
-
+        
         res.clearCookie("refreshToken", cookieOptions);
         res.clearCookie("accessToken", cookieOptions);
 
@@ -166,7 +167,7 @@ export const logout = (req, res) => {
         sameSite: "none"
     });
 
-    res.json({ success: true, message: "Logged out successfully" });
+    res.redirect("/login")
 };
 
 // Middleware de login

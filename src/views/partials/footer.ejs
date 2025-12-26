@@ -1,0 +1,37 @@
+<footer class="app-footer">
+    <div class="footer-text">
+        &copy; <%= new Date().getFullYear() %> FitApp Pro. Todos los derechos reservados.
+            <br>
+            <span style="font-size: 0.7rem; margin-top: 8px; display: block;">Diseñado para el alto rendimiento.</span>
+    </div>
+</footer>
+<script>
+    const avatar = document.getElementById("userAvatar");
+    const menu = document.getElementById("userMenu");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // Alternar menú (Toggle)
+    avatar.addEventListener("click", (e) => {
+        e.stopPropagation(); // Evita que el click cierre el menú inmediatamente
+        menu.classList.toggle("show");
+    });
+
+    // Cerrar al hacer click en cualquier parte de la pantalla
+    document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !avatar.contains(e.target)) {
+            menu.classList.remove("show");
+        }
+    });
+
+    // Prevenir que el menú se cierre si haces click dentro de él
+    menu.addEventListener("click", (e) => {
+        e.stopPropagation();
+    });
+
+    // Acción de Logout
+    logoutBtn.addEventListener("click",async () => {
+        await fetch("/api/logout",{
+            method: "POST"
+        })
+    });
+</script>

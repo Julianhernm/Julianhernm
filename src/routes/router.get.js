@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { login, home, register, prueba} from "../controller/controller.js";
-import { authMiddleware, loginMiddleware} from "../controller/controller.auth.js";
+import { login, homePage, register, createTemplate } from "../controller/controller.js";
+import { authMiddleware, loginMiddleware } from "../controller/controller.auth.js";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get("/login", loginMiddleware, login);
 router.get("/register", loginMiddleware, register);
 
 // Para rutas protegidas, usar authMiddleware que redirige si NO estás autenticado
-router.get("/home", authMiddleware, home);
-router.get("/prueba", authMiddleware, prueba);
+router.get("/home", authMiddleware, homePage);
+router.get("/create-template", authMiddleware, createTemplate)
 
 export default router;

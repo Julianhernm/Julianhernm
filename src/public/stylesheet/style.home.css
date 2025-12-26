@@ -1,0 +1,401 @@
+  :root {
+      /* Paleta Neutra (Dark Mode Premium) */
+      --bg-body: #09090b;
+      /* Casi negro */
+      --bg-card: #18181b;
+      /* Gris muy oscuro */
+      --bg-card-hover: #27272a;
+      /* Ligeramente más claro */
+
+      /* Bordes sutiles */
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.15);
+
+      /* Tipografía */
+      --text-main: #818185;
+      --text-secondary: #a1a1aa;
+      --text-tertiary: #71717a;
+
+      /* Acento Único (Azul Eléctrico / Productivity Blue) */
+      --accent: #3b82f6;
+      --accent-dim: rgba(59, 130, 246, 0.1);
+
+      /* Espaciado */
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+  }
+
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      /* Texto nítido en MacOS */
+  }
+
+  body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+  }
+
+  /* --- Header Minimalista --- */
+  .app-headers {
+      padding: 24px 24px 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+  }
+
+  .user-greeting h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+  }
+
+  .user-greeting p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+  }
+
+  .user-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: border-color 0.2s;
+  }
+
+  .user-avatar:hover {
+      border-color: var(--accent);
+  }
+
+  /* --- Área Central (Carrusel) --- */
+  .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+  }
+
+  .carousel-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  }
+
+  .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      padding-left: 4px;
+  }
+
+  /* Carrusel con Scroll Snap Nativo */
+  .carousel-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+      /* Espacio para scrollbar invisible */
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      /* Firefox */
+  }
+
+  .carousel-track::-webkit-scrollbar {
+      display: none;
+      /* Chrome/Safari */
+  }
+
+  .workout-card {
+      min-width: 280px;
+      max-width: 280px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+      position: relative;
+  }
+
+  .workout-card:hover {
+      background-color: var(--bg-card-hover);
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+  }
+
+  .card-badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 100px;
+      background-color: var(--bg-body);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+  }
+
+  .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+  }
+
+  .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.5rem;
+      color: var(--text-tertiary);
+  }
+
+  .card-meta i {
+      margin-right: 4px;
+      vertical-align: middle;
+      text-align: left;
+  }
+
+  .card-arrow {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0;
+      color: var(--accent);
+      transform: translateX(-10px);
+      transition: all 0.2s ease;
+  }
+
+  .workout-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+  }
+
+  /* --- Navegación Secundaria (Debajo del carrusel) --- */
+  .secondary-nav {
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+  }
+
+  .nav-tabs {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+  }
+
+  .nav-tab-item {
+      padding: 12px 0;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+  }
+
+  .nav-tab-item:hover {
+      color: var(--text-main);
+  }
+
+  .nav-tab-item.active {
+      color: var(--text-main);
+      font-weight: 500;
+  }
+
+  .nav-tab-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      /* Overlaps border */
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--accent);
+      border-radius: 2px 2px 0 0;
+  }
+
+  /* --- Área de Contenido Dinámico (Lista simple) --- */
+  .list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  }
+
+  .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      /* Transparent background, only visible on hover for cleaner look */
+      transition: background-color 0.2s;
+  }
+
+  .list-item:hover {
+      background-color: var(--bg-card);
+  }
+
+  .list-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+  }
+
+  .list-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+  }
+
+  .item-text h4 {
+      font-size: 0.95rem;
+      font-weight: 500;
+  }
+
+  .item-text span {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+  }
+
+  .list-action {
+      color: var(--text-tertiary);
+  }
+
+  /* --- Navegación Inferior (Estilo App) --- */
+  .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(9, 9, 11, 0.9);
+      /* Transparencia */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-subtle);
+      padding: 16px 24px 24px 24px;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+  }
+
+  .bottom-menu {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+  }
+
+  .menu-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: color 0.2s;
+  }
+
+  .menu-btn i {
+      font-size: 1.5rem;
+  }
+
+  .menu-btn span {
+      font-size: 0.7rem;
+      font-weight: 500;
+  }
+
+  .menu-btn:hover {
+      color: var(--text-main);
+  }
+
+  .menu-btn.active {
+      color: var(--accent);
+  }
+
+  /* Floating Action Button (FAB) para crear */
+  .fab-create {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 90;
+  }
+
+  .fab-create:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
+  }
+
+  /* Responsive adjustments */
+  @media (min-width: 768px) {
+      .bottom-nav {
+          display: none;
+          /* Ocultar nav inferior en desktop si prefieres sidebar */
+      }
+
+      /* En desktop, mover la nav al header o sidebar */
+      .main-container {
+          padding-bottom: 40px;
+      }
+  }
+
+  /* Solo mostramos la nav inferior en movil/tablet para "App Experience" */
+  @media (min-width: 769px) {
+      .bottom-nav {
+          display: none;
+      }
+
+      .app-header {
+          padding-bottom: 24px;
+          border-bottom: 1px solid var(--border-subtle);
+      }
+  }
+
+  @media (max-width: 768px) {
+      .fab-create {
+          bottom: 100px;
+          /* Ajuste para no chocar con nav bar */
+      }
+  }

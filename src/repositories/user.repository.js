@@ -5,8 +5,8 @@ export const verify = async (email) => {
 
     try {
         return await users.findOne({
-            where: {email},
-            attributes: ["email", "password_hash", "id"]
+            where: { email },
+            attributes: ["name", "email", "password_hash", "id"]
         })
 
     } catch (error) {
@@ -15,12 +15,12 @@ export const verify = async (email) => {
     }
 }
 
-export const registerUser = async (name, email, password)=>{
+export const registerUser = async (name, email, password) => {
 
     try {
         return await users.create({
             name,
-            email, 
+            email,
             password_hash: password
         })
     } catch (error) {

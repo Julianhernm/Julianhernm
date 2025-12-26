@@ -1,50 +1,116 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Eliminar ejercicio</title>
+<link rel="stylesheet" href="/stylesheet/style.home.css">
 </head>
+
 <body>
-  <h1>Eliminar ejercicio</h1>
 
-  <form id="deleteForm">
-    <label for="id">ID:</label>
-    <input type="number" id="id" name="id" required><br><br>
+  <header class="app-headers">
+    <div class="user-greeting">
+      <p id = "dateNow">Jueves, 19 Oct</p>
+      <h1>Hola, <%- name %></h1>
+    </div>
 
-    <label for="name">Nombre:</label>
-    <input type="text" id="name" name="name" required><br><br>
+  </header>
 
-    <button type="submit">Eliminar</button>
-  </form>
+  <main class="main-container">
 
-  <p id="response"></p>
+    <section class="carousel-section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="section-label">Tus Rutinas</span>
+        <span class="section-label" style="cursor: pointer; color: var(--accent);">Ver todas</span>
+      </div>
 
-  <script>
-    const form = document.getElementById('deleteForm');
-    const responseMsg = document.getElementById('response');
+      <div class="carousel-track" id="templateCarousel"> 
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      </div>
 
-      const id = document.getElementById('id').value;
-      const name = document.getElementById('name').value;
 
-      try {
-        const res = await fetch('http://localhost:3000/api-logic/delete-exercise', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ id, name })
-        });
+      <a href="/create-template" class="workout-card"
+        style="border-style: dashed; background: transparent; align-items: center; justify-content: center; opacity: 0.6; text-decoration: none;">
+        <i class="ph ph-plus" style="font-size: 2rem; color: var(--text-tertiary);"></i>
+        <span style="color: var(--text-tertiary); font-size: 0.9rem; font-weight: 500;">Nueva Rutina</span>
+      </a>
+      </div>
+    </section>
 
-        const data = await res.json();
-        responseMsg.textContent = `${data.message} → ${JSON.stringify(data.data)}`;
-      } catch (error) {
-        responseMsg.textContent = 'Error en la petición';
-        console.error(error);
-      }
-    });
-  </script>
-</body>
-</html>
+    <nav class="secondary-nav">
+      <ul class="nav-tabs">
+        <li class="nav-tab-item active" onclick="switchTab(this, 'templates')">Mis Plantillas</li>
+        <li class="nav-tab-item" onclick="switchTab(this, 'history')">Historial</li>
+        <li class="nav-tab-item" onclick="switchTab(this, 'stats')">Estadísticas</li>
+      </ul>
+    </nav>
+
+    <div class="list-view" id="listView">
+      <div class="list-item">
+        <div class="list-info">
+          <div class="list-icon">
+            <i class="ph ph-barbell"></i>
+          </div>
+          <div class="item-text">
+            <h4>Sentadilla con Barra</h4>
+            <span>4 series • Último: 100kg</span>
+          </div>
+        </div>
+        <div class="list-action">
+          <i class="ph ph-caret-right"></i>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="list-info">
+          <div class="list-icon">
+            <i class="ph ph-person-simple-run"></i>
+          </div>
+          <div class="item-text">
+            <h4>Peso Muerto Rumano</h4>
+            <span>3 series • Último: 80kg</span>
+          </div>
+        </div>
+        <div class="list-action">
+          <i class="ph ph-caret-right"></i>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-info">
+          <div class="list-icon">
+            <i class="ph ph-arrows-horizontal"></i>
+          </div>
+          <div class="item-text">
+            <h4>Press Banca</h4>
+            <span>4 series • Último: 70kg</span>
+          </div>
+        </div>
+        <div class="list-action">
+          <i class="ph ph-caret-right"></i>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <button class="fab-create">
+    <i class="ph ph-plus"></i>
+  </button>
+
+  <nav class="bottom-nav">
+    <div class="bottom-menu">
+      <button class="menu-btn active">
+        <i class="ph-fill ph-house"></i>
+        <span>Inicio</span>
+      </button>
+      <button class="menu-btn">
+        <i class="ph ph-magnifying-glass"></i>
+        <span>Explorar</span>
+      </button>
+      <button class="menu-btn">
+        <i class="ph ph-chart-bar"></i>
+        <span>Progreso</span>
+      </button>
+      <button class="menu-btn">
+        <i class="ph ph-gear"></i>
+        <span>Ajustes</span>
+      </button>
+    </div>
+  </nav>
+
+  <script src="js/home.js"></script>

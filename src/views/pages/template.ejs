@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="/stylesheet/style.template.css">
+</head>
+
+<body>
+
+    <header class="app-headers">
+        <div class="workout-title-section">
+            <input type="text" id="workoutName" class="workout-name-input" placeholder="Nombre de la rutina..."
+                value="Mi Entrenamiento">
+            <p style="color: var(--text-tertiary); margin-top: 8px;">Define tus ejercicios y series para hoy</p>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-box">
+                <span class="summary-val" id="count-ex">0</span>
+                <span class="summary-label">Ejercicios</span>
+            </div>
+            <div class="summary-box">
+                <span class="summary-val" id="count-sets">0</span>
+                <span class="summary-label">Series</span>
+            </div>
+            <div class="summary-box">
+                <span class="summary-val" id="count-reps">0</span>
+                <span class="summary-label">Reps Totales</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div id="exercisesContainer">
+            <div class="no-data" id="emptyMsg">No hay ejercicios aún. ¡Comienza agregando uno!</div>
+        </div>
+
+        <button class="btn-add-exercise" id="btnAddExercise">
+            <i class="ph ph-plus"></i> Agregar Nuevo Ejercicio
+        </button>
+    </main>
+
+    <button class="fab-save" id="btnSave">
+        <i class="ph-fill ph-floppy-disk"></i> Guardar Rutina
+    </button>
+
+    <script src="/js/template.js"></script>
+</body>
+
+</html>
