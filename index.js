@@ -15,6 +15,7 @@ import { dirname, join } from "path";
 import { config } from "./src/config/env.js";
 import { initDB } from "./src/config/connect.db.js";
 import routerLogic from "./src/routes/router.logic.js"
+import session from "express-session";
 import "./src/models/associations.js";
 
 // reconstruir __dirname en ESM
@@ -45,24 +46,36 @@ const configHel = {
 };
 
 //config cors
-const configCors= {
-  origin:(origin, callback)=>{
+const configCors = {
+  origin: (origin, callback) => {
     const allowed = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000"
-];
+      "http://localhost:3000",
+      "http://127.0.0.1:3000"
+    ];
 
 
-    if(!origin || allowed.includes(origin)){
+    if (!origin || allowed.includes(origin)) {
       callback(null, true);
-    }else{
+    } else {
       callback(new Error("Origen no permitido por Cors"))
     }
   },
-  methods: ["GET", "POST","DELETE", "PATCH", "PUT"],
+  methods: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
   maxAge: 6000000
+}
+
+//Config express-session
+const sess = {
+  resave: false,
+  saveUninitialized: false,
+  secret: "keyboard cat",
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+    secure: false,
+    path: "/"
+  }
 }
 
 const app = express();
@@ -71,8 +84,9 @@ const app = express();
 app.use(helmet(configHel));
 app.use(cors(configCors));
 app.use(express.static(join(__dirname, "src", "public")));
-app.use(urlencoded({extended: true}))
+app.use(urlencoded({ extended: true }))
 app.use(express.json());
+app.use(express(sess))
 app.use(morgan("dev"));
 app.use(limiter)
 app.use(delay)
@@ -92,6 +106,5 @@ initDB()
 app.use("/api", routerAuth)
 app.use("/api-logic", routerLogic)
 app.use("/", routes);
-
 
 app.listen(process.env.PORT || 3000, async () => logger.info(`Server on port ${process.env.PORT || 3000}`));

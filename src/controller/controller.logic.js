@@ -1,10 +1,10 @@
 import { addExercise, destroyExercises } from "../repositories/exercises.repository.js";
 import { createWorkoutSession } from "../repositories/workout.repository.js";
-import { createTemplate, getDataTemplate, getId } from "../repositories/template.js";
+import { createTemplate, getDataTemplate} from "../repositories/template.js";
 
+//create exercises
 export const add = async (req, res) => {
     const { name } = req.body;
-
     try {
         const dateNow = new Date()
         const result = await addExercise(20, name, dateNow)
@@ -17,12 +17,10 @@ export const add = async (req, res) => {
 
 export const createSessionController = async (req, res) => {
     try {
-        const userId = 9;
         const { exercises } = req.body
+        const { userId } = req.user
 
         const session = await createWorkoutSession(userId, exercises)
-
-        console.log(session)
 
         res.status(201).json({ message: "session succesfully", session_id: session.id })
     } catch (error) {
@@ -72,17 +70,5 @@ export const showTemplate = async (req, res) => {
         res.status(500).json({
                 message: "Server Error"
             })
-    }
-}
-
-export const showId= async (req, user)=>{
-    const {userId} = req.user;
-
-    try {
-        const data = await getId(userId)
-        res.status(203).json({message: "successfully", data})
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message: "Server Error"})
     }
 }

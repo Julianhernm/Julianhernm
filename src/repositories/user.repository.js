@@ -28,3 +28,17 @@ export const registerUser = async (name, email, password) => {
         throw console.error(error)
     }
 }
+
+export const verifyById = async (userId)=>{
+    try {
+        const data = await users.findOne(
+            {where: {
+                id: userId
+            }}
+        )
+        return data
+    } catch (error) {
+        console.error(error)
+        return error
+    }
+}
