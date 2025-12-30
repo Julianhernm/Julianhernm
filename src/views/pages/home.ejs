@@ -5,7 +5,7 @@
 
   <header class="app-headers">
     <div class="user-greeting">
-      <p id = "dateNow">Jueves, 19 Oct</p>
+      <p id="dateNow">Jueves, 19 Oct</p>
       <h1>Hola, <%- name %></h1>
     </div>
 
@@ -19,7 +19,7 @@
         <span class="section-label" style="cursor: pointer; color: var(--accent);">Ver todas</span>
       </div>
 
-      <div class="carousel-track" id="templateCarousel"> 
+      <div class="carousel-track" id="templateCarousel">
 
       </div>
 
@@ -34,13 +34,14 @@
 
     <nav class="secondary-nav">
       <ul class="nav-tabs">
-        <li class="nav-tab-item active" onclick="switchTab(this, 'exercises')">Mis Plantillas</li>
-        <li class="nav-tab-item" onclick="switchTab(this, 'workouts')">Historial</li>
+        <li class="nav-tab-item active" onclick="switchTab(this, 'templates')">Mis Plantillas</li>
+        <li class="nav-tab-item" onclick="switchTab(this, 'history')">Historial</li>
         <li class="nav-tab-item" onclick="switchTab(this, 'stats')">Estadísticas</li>
+
       </ul>
     </nav>
     <div class="list-view" id="listView">
-      </div>
+    </div>
 
   </main>
 

@@ -1,4 +1,4 @@
-import { verify, registerUser } from "../repositories/user.repository.js";
+import { verify, registerUser, verifyById } from "../repositories/user.repository.js";
 import { comparePassword, hashPassword } from "../config/bcrypt.js";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../config/jwt.js";
 import validator from "validator";
@@ -112,7 +112,14 @@ export const authMiddleware = async (req, res, next) => {
     try {
         // verificar token
         const decodedRefresh = await verifyRefreshToken(refreshToken);
+
+        if(await verifyById(decodedRefresh.userId) === null){
+            res.clearCookie("refreshToken");
+            res.clearCookie("accessToken")
+            return res.redirect("/login")
+        }
         req.user = decodedRefresh;
+
         next();
     } catch (error) {
         // limpiar cookies malas
@@ -180,9 +187,12 @@ export const loginMiddleware = async (req, res, next) => {
         // verificar token
         const decoded = await verifyRefreshToken(token);
 
+        //verificar por Id si exisite en la base de datos
+        if(await verifyById(decoded.userId) !== null) return res.redirect("/home")
+
         // si es válido, redirigir a home
         req.user = decoded;
-        return res.redirect("/home");
+        return next()
     } catch (error) {
         // limpiar cookie mala y seguir
         const cookieOptions = {

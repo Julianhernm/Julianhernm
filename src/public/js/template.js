@@ -117,12 +117,17 @@ document.getElementById('btnSave').onclick = async () => {
         console.log("Enviando datos:", data);
 
         // Aquí ejecutas tus fetch originales
-        await fetch("/api-logic/new-template", {
+         await fetch("/api-logic/new-template", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         });
 
+        await fetch("/api-logic/create-session",{
+            method: "POST",
+            headers:{ "Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        })
         window.location.href = "/home";
 
     } catch (e) {

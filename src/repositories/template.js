@@ -72,16 +72,3 @@ export const getDataTemplate = async (userId) => {
         console.error(error)
     }
 }
-
-export const getId = async (userId)=>{
-    try {
-        const data = await users.findOne(
-            {where: {
-                id: userId
-            }}
-        )
-        return data
-    } catch (error) {
-        console.error(error)
-    }
-}

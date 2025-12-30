@@ -7,9 +7,10 @@ export const all = async () => {
     return user
 }
 
+
+//crear ejercicios
 export const addExercise = async (user_id, name, created_at) => {
-    const result = await exercises.create({ user_id, name, created_at });
-    return result
+    return await exercises.create({ user_id, name, created_at });
 }
 
 export const destroyExercises = async (id, name) => {

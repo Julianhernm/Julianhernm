@@ -1,77 +1,5 @@
-// ===============================
-// DATA SIMULADA (BACKEND MOCK)
-// ===============================
-const dataByTab = {
-  workouts: [
-    {
-      title: "Sentadilla con Barra",
-      sets: "4 series",
-      last: "Último: 100kg",
-      icon: "ph-barbell"
-    },
-    {
-      title: "Press Banca",
-      sets: "3 series",
-      last: "Último: 80kg",
-      icon: "ph-barbell"
-    }
-  ],
-  exercises: [
-    {
-      title: "Curl Bíceps",
-      sets: "4 series",
-      last: "Último: 20kg",
-      icon: "ph-dumbbell"
-    },
-    {
-      title: "Extensión de Tríceps",
-      sets: "3 series",
-      last: "Último: 25kg",
-      icon: "ph-dumbbell"
-    }
-  ],
-  stats: [
-    {
-      title: "Progreso Mensual",
-      sets: "↑ 12%",
-      last: "Últimos 30 días",
-      icon: "ph-chart-line-up"
-    }
-  ]
-};
-
-//Render Dinamico
-function renderList(items) {
-  const listView = document.getElementById("listView");
-  listView.innerHTML = "";
-
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "list-item";
-
-    div.innerHTML = `
-      <div class="list-info">
-        <div class="list-icon">
-          <i class="ph ${item.icon}"></i>
-        </div>
-        <div class="item-text">
-          <h4>${item.title}</h4>
-          <span>${item.sets} • ${item.last}</span>
-        </div>
-      </div>
-      <div class="list-action">
-        <i class="ph ph-caret-right"></i>
-      </div>
-    `;
-
-    listView.appendChild(div);
-  });
-}
-
-// ===============================
-// SWITCH DE TABS
-// ===============================
-function switchTab(element, tabName) {
+//switch de tabs: router
+function switchTab(element, view) {
   document.querySelectorAll(".nav-tab-item").forEach(item => {
     item.classList.remove("active");
   });
@@ -82,17 +10,94 @@ function switchTab(element, tabName) {
   listView.style.opacity = "0";
 
   setTimeout(() => {
-    renderList(dataByTab[tabName]);
+    listView.innerHTML = "";
+
+    if (view === "templates") renderTemplates();
+    if (view === "history") renderHistory();
+    if (view === "stats") renderStats();
+
     listView.style.opacity = "1";
   }, 200);
 }
 
-//carga inicial
+//vista: plantillas
+async function renderTemplates() {
+  const listView = document.getElementById("listView");
+
+  try {
+    const res = await fetch("/api-logic/show-template", { method: "POST" });
+    const { data } = await res.json();
+
+    data.forEach(template => {
+      const div = document.createElement("div");
+      div.className = "list-item";
+
+      div.innerHTML = `
+        <div class="list-info">
+          <div class="list-icon">
+            <i class="ph ph-barbell"></i>
+          </div>
+          <div class="item-text">
+            <h4>${template.name}</h4>
+            <span>${template.templateExercises.length} ejercicios</span>
+          </div>
+        </div>
+        <div class="list-action">
+          <i class="ph ph-caret-right"></i>
+        </div>
+      `;
+
+      listView.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// vista: historial
+async function renderHistory() {
+  const listView = document.getElementById("listView");
+
+  try {
+    const res = await fetch("/api-logic/show-history", { method: "POST" });
+    const { data } = await res.json();
+
+    data.forEach(session => {
+      const div = document.createElement("div");
+      div.className = "history-item";
+
+      div.innerHTML = `
+        <h4>${session.date}</h4>
+        <p>${session.totalExercises} ejercicios</p>
+        <span>Volumen: ${session.totalVolume} kg</span>
+      `;
+
+      listView.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//vista: estadistica
+async function renderStats() {
+  const listView = document.getElementById("listView");
+
+  listView.innerHTML = `
+    <div class="stats-card">
+      <h3>Resumen</h3>
+      <p>Entrenamientos: 32</p>
+      <p>Volumen total: 12,400 kg</p>
+    </div>
+  `;
+}
+
+// carga inicial
 document.addEventListener("DOMContentLoaded", () => {
-  renderList(dataByTab.workouts);
+  renderTemplates();
 });
-
-
 
 
 // Función para insertar elementos
@@ -125,7 +130,7 @@ async function addInnerHTML() {
         <div class="workout-card">
           <span class="card-badge">Fuerza</span>
           <div style="margin-top: 10px;">
-            ${i}
+            ${data.data[i].name}
             <div class="card-meta" style="margin-top: 8px;">
               ${htmlLi}
             </div>
@@ -133,7 +138,6 @@ async function addInnerHTML() {
           <i class="ph-bold ph-arrow-right card-arrow"></i>
         </div>
       `;
-
       container.innerHTML += html;
     }
   } catch (error) {

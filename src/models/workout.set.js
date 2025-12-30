@@ -13,7 +13,8 @@ export const workout_sets = sequelize.define("WorkoutSets",{
     },
     reps:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     },
     weight:{
         type: DataTypes.DECIMAL(5, 2),

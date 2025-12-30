@@ -24,8 +24,13 @@ export const exercises = sequelize.define("Exercises",{
     created_at:{
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
+    },
+    session_id:{
+        type: DataTypes.STRING,
+        allowNull: false
     }
 },{
     tableName: "exercises",
     timestamps: false
+
 })
