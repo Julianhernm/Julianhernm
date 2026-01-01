@@ -14,9 +14,9 @@ export const createTemplate = (req, res) => {
 export const homePage = (req, res) => {
     const { name } = req.user
     console.log(req.user)
-    res.render("pages/home", { layout: true, name})
+    res.render("pages/home", { layout: true, name })
 }
 
-export const useTemplate = (req, res)=>{
+export const useTemplate = (req, res) => {
     res.render("pages/workout-session", { layout: true })
 }

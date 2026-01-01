@@ -11,6 +11,6 @@ router.get("/register", loginMiddleware, register);
 // Para rutas protegidas, usar authMiddleware que redirige si NO estás autenticado
 router.get("/home", authMiddleware, homePage);
 router.get("/create-template", authMiddleware, createTemplate)
-router.get("/e", authMiddleware, useTemplate)
+router.get("/home/workout/:id", authMiddleware, useTemplate);
 
 export default router;

@@ -1,28 +1,33 @@
+const templateId = window.location.pathname.split("/").pop();
 
-const templateFromDB = {
-    id: 7,
-    name: "Push Day",
-    exercises: [
-        { id: 1, name: "Press Banca", sets: 4 },
-        { id: 2, name: "Fondos", sets: 3 },
-        { id: 3, name: "Press Militar", sets: 3 }
-    ]
+const getTemplateData = async () => {
+    const response = await fetch(`/api-logic/template-use/${templateId}`, {
+        method: "POST",
+        body:{
+            "Content-Type": "application/json"
+        }
+    });
+
+    const data = await response.json();
+    return data;
 };
+
+
 
 const container = document.getElementById("exercisesContainer");
 
-/* ===========================
-   CARGA DE PLANTILLA
-=========================== */
+//load template
+function loadTemplate(data) {
+    const template = data.result[0];
 
-function loadTemplate(template) {
     document.getElementById("workoutName").value = template.name;
 
-    template.exercises.forEach((ex, index) => {
+    template.templateExercises.forEach((ex, index) => {
         const card = createExerciseCard(ex, index + 1);
         container.appendChild(card);
     });
 }
+
 
 function createExerciseCard(exercise, index) {
     const card = document.createElement("div");
@@ -33,16 +38,23 @@ function createExerciseCard(exercise, index) {
     card.innerHTML = `
         <div class="exercise-header">
             <div class="exercise-index">${index}</div>
-            <input class="input-minimal ex-name" value="${exercise.name}" disabled>
+            <input 
+                class="input-minimal ex-name" 
+                value="${exercise.exercise_name}" 
+                disabled
+            >
             <button class="btn-icon toggle-ex">👁</button>
         </div>
+
         <div class="sets-list"></div>
+
         <button class="btn-add-set">+ Agregar serie</button>
     `;
 
     const setsList = card.querySelector(".sets-list");
 
-    for (let i = 0; i < exercise.sets; i++) {
+    // 👉 cantidad de series desde TemplateSets
+    for (let i = 0; i < exercise.TemplateSets.length; i++) {
         addSet(setsList);
     }
 
@@ -51,6 +63,7 @@ function createExerciseCard(exercise, index) {
 
     return card;
 }
+
 
 /* ===========================
    SERIES
@@ -63,8 +76,8 @@ function addSet(list) {
     row.className = "set-row";
     row.innerHTML = `
         <span>S${setNum}</span>
-        <input type="number" class="input-minimal rep" value="0">
-        <input type="number" class="input-minimal weight" value="0">
+        <input type="number" class="input-minimal rep" value="0" min="0">
+        <input type="number" class="input-minimal weight" value="0" min="0">
         <button class="btn-icon">✖</button>
     `;
 
@@ -81,6 +94,7 @@ function reindexSets(list) {
         row.querySelector("span").textContent = `S${i + 1}`;
     });
 }
+
 
 /* ===========================
    DESACTIVAR EJERCICIO
@@ -110,14 +124,11 @@ document.getElementById("btnSave").onclick = () => {
 
     document.querySelectorAll(".exercise-card").forEach(card => {
         const active = card.dataset.active === "true";
-        const sets = [];
 
-        card.querySelectorAll(".set-row").forEach(row => {
-            sets.push({
-                reps: active ? Number(row.querySelector(".rep").value) : 0,
-                weight: active ? Number(row.querySelector(".weight").value) : 0
-            });
-        });
+        const sets = Array.from(card.querySelectorAll(".set-row")).map(row => ({
+            reps: active ? Number(row.querySelector(".rep").value) : 0,
+            weight: active ? Number(row.querySelector(".weight").value) : 0
+        }));
 
         payload.exercises.push({
             exercise_id: card.dataset.exerciseId,
@@ -128,8 +139,12 @@ document.getElementById("btnSave").onclick = () => {
     console.log("PAYLOAD FINAL:", payload);
 };
 
+
 /* ===========================
    INIT
 =========================== */
 
-loadTemplate(templateFromDB);
+(async () => {
+    const data = await getTemplateData();
+    loadTemplate(data);
+})();

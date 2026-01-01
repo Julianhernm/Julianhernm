@@ -53,7 +53,7 @@ export const createTemplate = async (user_id, name, Exercises) => {
 export const getDataTemplate = async (userId) => {
     try {
         const workouts = await templateWorkout.findAll({
-            where: {user_id: userId},
+            where: { user_id: userId },
             attributes: ["user_id", "id", "name"],
             include: [{
                 model: templateExercises,

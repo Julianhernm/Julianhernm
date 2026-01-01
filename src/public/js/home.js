@@ -110,6 +110,7 @@ async function addInnerHTML() {
     });
 
     const data = await result.json();
+    console.log(data)
 
     for (let i = 0; i < data.data.length; i++) {
       let htmlLi = ``;
@@ -127,10 +128,10 @@ async function addInnerHTML() {
       }
 
       let html = `
-        <div class="workout-card">
+        <div class="workout-card" onclick = enterTemplate(${data.data[i].id})>
           <span class="card-badge">Fuerza</span>
           <div style="margin-top: 10px;">
-            ${data.data[i].name}
+            ${data.data[i].name + data.data[i].id}
             <div class="card-meta" style="margin-top: 8px;">
               ${htmlLi}
             </div>
@@ -146,6 +147,11 @@ async function addInnerHTML() {
 }
 
 addInnerHTML();
+
+//Ingreso de las plantillas
+function enterTemplate(id) {
+    window.location.href = `/home/workout/${id}`
+}
 
 // Interacción simple con tarjetas
 document.querySelectorAll('.workout-card').forEach(card => {
@@ -176,6 +182,9 @@ function showDate() {
 
   dateNow.textContent = `${day}, ${hour}`;
 }
+
+
+
 
 setInterval(showDate, 1000);
 showDate();
