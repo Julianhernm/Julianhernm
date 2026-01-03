@@ -50,6 +50,7 @@ export const newTemplate = async (req, res) => {
         const result = await createTemplate(userId, name, exercises);
 
         res.json({ message: "created successfully", result })
+        console.log(result)
     } catch (error) {
         console.error(error)
         res.json({ message: "error", error })

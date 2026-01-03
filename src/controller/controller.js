@@ -7,16 +7,17 @@ export const register = (req, res) => {
 }
 
 export const createTemplate = (req, res) => {
-    res.render("pages/template", { layout: true })
+    const {name, email} = req.user
+    res.render("pages/template", { layout: true, name, email })
 
 }
 
 export const homePage = (req, res) => {
-    const { name } = req.user
-    console.log(req.user)
-    res.render("pages/home", { layout: true, name })
+    const { name, email } = req.user
+    res.render("pages/home", { layout: true, name, email })
 }
 
 export const useTemplate = (req, res) => {
-    res.render("pages/workout-session", { layout: true })
+    const {name, email} = req.user
+    res.render("pages/workout-session", { layout: true, name, email})
 }

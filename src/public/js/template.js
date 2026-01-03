@@ -113,9 +113,6 @@ document.getElementById('btnSave').onclick = async () => {
             data.exercises.push({ exercise: exName, sets });
         });
 
-        // Simulación de envío de API
-        console.log("Enviando datos:", data);
-
         // Aquí ejecutas tus fetch originales
          await fetch("/api-logic/new-template", {
             method: "POST",
@@ -128,7 +125,9 @@ document.getElementById('btnSave').onclick = async () => {
             headers:{ "Content-Type": "application/json"},
             body: JSON.stringify(data)
         })
-        window.location.href = "/home";
+
+        window.location.href = "/home"
+        
 
     } catch (e) {
         alert(e.message);

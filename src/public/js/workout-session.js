@@ -3,7 +3,7 @@ const templateId = window.location.pathname.split("/").pop();
 const getTemplateData = async () => {
     const response = await fetch(`/api-logic/template-use/${templateId}`, {
         method: "POST",
-        body:{
+        headers:{
             "Content-Type": "application/json"
         }
     });
@@ -116,14 +116,16 @@ function toggleExercise(card) {
    GUARDAR SESIÓN
 =========================== */
 
-document.getElementById("btnSave").onclick = () => {
+document.getElementById("btnSave").onclick = async () => {
     const payload = {
-        workout_name: workoutName.value,
+        name: workoutName.value,
         exercises: []
     };
 
     document.querySelectorAll(".exercise-card").forEach(card => {
         const active = card.dataset.active === "true";
+
+        const exerciseName = card.querySelector(".ex-name").value;
 
         const sets = Array.from(card.querySelectorAll(".set-row")).map(row => ({
             reps: active ? Number(row.querySelector(".rep").value) : 0,
@@ -131,13 +133,23 @@ document.getElementById("btnSave").onclick = () => {
         }));
 
         payload.exercises.push({
-            exercise_id: card.dataset.exerciseId,
+            id: card.dataset.exerciseId,
+            exercise: exerciseName,
             sets
         });
     });
 
-    console.log("PAYLOAD FINAL:", payload);
+    await fetch("/api-logic/create-session", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+
+    window.location.href = "/home"
 };
+
 
 
 /* ===========================

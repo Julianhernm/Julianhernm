@@ -174,7 +174,7 @@ export const logout = (req, res) => {
         sameSite: "none"
     });
 
-    res.redirect("/login")
+    return  res.status(200).json({message: "logged out"})
 };
 
 // Middleware de login
