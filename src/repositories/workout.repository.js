@@ -81,3 +81,35 @@ export const useTemplates = async (workoutId) => {
     throw error
   }
 }
+
+export const sessions = async (userId) => {
+  const data = await workout_session.findAll({
+    where: {
+      user_id: 35
+    },
+    attributes: [
+      "id",
+      "created_at",
+
+      [
+        sequelize.literal(`(
+        SELECT COUNT(*)
+        FROM exercises e
+        WHERE e.session_id = workout_session.id
+      )`),
+        "exercises_number"
+      ],
+
+      [
+        sequelize.literal(`(
+        SELECT SUM(wst.set_number)
+        FROM workout_sets wst
+        WHERE wst.session_id = workout_session.id
+      )`),
+        "volum"
+      ]
+    ],
+    order: [["created_at", "DESC"]],
+
+  })
+};

@@ -12,7 +12,7 @@ router.post("/new-template", authMiddleware, newTemplate)
 router.post("/show-template",authMiddleware, showTemplate)
 router.post("/template-use/:id", authMiddleware, templateUsed)
 router.post("/show-history", (req, res)=>{
-    res.json({ message: "todo okey"})
+    res.json({ message: "todo okey", data: ["hola", "pepe"]})
 })
 
 export default router 

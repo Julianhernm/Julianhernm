@@ -62,6 +62,7 @@ async function renderHistory() {
   try {
     const res = await fetch("/api-logic/show-history", { method: "POST" });
     const { data } = await res.json();
+    console.log(data)
 
     data.forEach(session => {
       const div = document.createElement("div");
