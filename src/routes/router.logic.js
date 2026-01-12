@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { add, showTemplate, templateUsed } from "../controller/controller.logic.js";
+import { add, showHistory, showTemplate, templateUsed } from "../controller/controller.logic.js";
 import { createSessionController, deleteExerciseController, newTemplate } from "../controller/controller.logic.js";
 import { authMiddleware } from "../controller/controller.auth.js";
 
@@ -11,8 +11,6 @@ router.delete("/delete-exercise", authMiddleware, deleteExerciseController)
 router.post("/new-template", authMiddleware, newTemplate)
 router.post("/show-template",authMiddleware, showTemplate)
 router.post("/template-use/:id", authMiddleware, templateUsed)
-router.post("/show-history", (req, res)=>{
-    res.json({ message: "todo okey", data: ["hola", "pepe"]})
-})
+router.post("/show-history", authMiddleware, showHistory)
 
 export default router 

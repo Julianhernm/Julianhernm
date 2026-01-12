@@ -5,6 +5,7 @@ import { exercises } from "../models/exercise.js";
 import { templateWorkout } from "../models/template.workout.js";
 import { templateExercises } from "../models/template.exercises.js";
 import { templateSets } from "../models/template.sets.js";
+import { Sequelize } from "sequelize";
 
 export const createWorkoutSession = async (userId, Exercises) => {
   const transaction = await sequelize.transaction();
@@ -83,33 +84,39 @@ export const useTemplates = async (workoutId) => {
 }
 
 export const sessions = async (userId) => {
-  const data = await workout_session.findAll({
-    where: {
-      user_id: 35
-    },
-    attributes: [
-      "id",
-      "created_at",
+  try {
+    const data = await workout_session.findAll({
+      where: {
+        user_id: userId
+      },
+      attributes: [
+        "id",
+        "created_at",
 
-      [
-        sequelize.literal(`(
+        [
+          sequelize.literal(`(
         SELECT COUNT(*)
         FROM exercises e
-        WHERE e.session_id = workout_session.id
+        WHERE e.session_id = WorkoutSession.id
       )`),
-        "exercises_number"
-      ],
+          "exercises_number"
+        ],
 
-      [
-        sequelize.literal(`(
+        [
+          sequelize.literal(`(
         SELECT SUM(wst.set_number)
         FROM workout_sets wst
-        WHERE wst.session_id = workout_session.id
+        WHERE wst.session_id = WorkoutSession.id
       )`),
-        "volum"
-      ]
-    ],
-    order: [["created_at", "DESC"]],
+          "volum"
+        ]
+      ],
+      order: [["created_at", "DESC"]],
 
-  })
+    })
+
+    return data
+  } catch (error) {
+    console.error(error);
+  }
 };

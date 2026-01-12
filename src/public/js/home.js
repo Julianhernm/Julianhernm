@@ -61,17 +61,32 @@ async function renderHistory() {
 
   try {
     const res = await fetch("/api-logic/show-history", { method: "POST" });
-    const { data } = await res.json();
-    console.log(data)
+    const data = await res.json();
 
-    data.forEach(session => {
+    //format the exercises creation date
+    const dateString = data.data[0].created_at
+    const dateFormater = new Date(dateString)
+
+    //day
+    const day = dateFormater.toLocaleDateString("es-ES", {
+      weekday: "long"
+    })
+
+    //hour
+    const hour = dateFormater.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+    console.log(dateFormater)
+
+    data.data.forEach(session => {
       const div = document.createElement("div");
       div.className = "history-item";
 
       div.innerHTML = `
-        <h4>${session.date}</h4>
-        <p>${session.totalExercises} ejercicios</p>
-        <span>Volumen: ${session.totalVolume} kg</span>
+        <h4>${day}, ${hour}</h4>
+        <p>${session.exercises_number} ejercicios</p>
+        <span>Volumen: ${session.volum} kg</span>
       `;
 
       listView.appendChild(div);
@@ -88,12 +103,47 @@ async function renderStats() {
 
   listView.innerHTML = `
     <div class="stats-card">
-      <h3>Resumen</h3>
-      <p>Entrenamientos: 32</p>
-      <p>Volumen total: 12,400 kg</p>
+      <canvas id = "chart" with="300" heigth="300"></canvas>
     </div>
   `;
+  const ctx = document.getElementById('chart');
+  const data = [
+    { year: 2010, count: 10 },
+    { year: 2011, count: 20 },
+    { year: 2012, count: 15 },
+    { year: 2013, count: 25 },
+    { year: 2014, count: 22 },
+    { year: 2015, count: 30 },
+    { year: 2016, count: 28 },
+  ];
+
+  new Chart(ctx, {
+    type: 'li',
+    data: {
+      labels: data.map(row => row.year),
+      datasets: [{
+        label: '# of Votes',
+        data: data.map(row => row.count),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      animation:true,
+      plugins:{
+        display: true
+      },
+      tooltip:{
+        enabled: true
+      }
+    }
+  });
 }
+
 
 // carga inicial
 document.addEventListener("DOMContentLoaded", () => {
@@ -111,7 +161,6 @@ async function addInnerHTML() {
     });
 
     const data = await result.json();
-    console.log(data)
 
     for (let i = 0; i < data.data.length; i++) {
       let htmlLi = ``;
@@ -151,7 +200,7 @@ addInnerHTML();
 
 //Ingreso de las plantillas
 function enterTemplate(id) {
-    window.location.href = `/home/workout/${id}`
+  window.location.href = `/home/workout/${id}`
 }
 
 // Interacción simple con tarjetas
@@ -188,4 +237,4 @@ function showDate() {
 
 
 setInterval(showDate, 1000);
-showDate();
+showDate()

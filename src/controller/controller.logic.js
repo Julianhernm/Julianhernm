@@ -1,5 +1,5 @@
 import { addExercise, destroyExercises } from "../repositories/exercises.repository.js";
-import { createWorkoutSession, useTemplates } from "../repositories/workout.repository.js";
+import { createWorkoutSession, sessions, useTemplates } from "../repositories/workout.repository.js";
 import { createTemplate, getDataTemplate } from "../repositories/template.js";
 
 //create exercises
@@ -82,6 +82,20 @@ export const templateUsed = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json(
+            { message: "Server Error" }
+        )
+    }
+}
+
+export const showHistory = async (req, res) => {
+    const { userId } = req.user;
+
+    try {
+        const data = await sessions(userId)
+        return res.status(200).json({ message: "successfully", data })
+    } catch (error) {
+        console.error(error);
+        res.status(500)(
             { message: "Server Error" }
         )
     }
