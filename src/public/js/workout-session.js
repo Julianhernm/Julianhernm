@@ -7,7 +7,6 @@ const getTemplateData = async () => {
             "Content-Type": "application/json"
         }
     });
-
     const data = await response.json();
     return data;
 };
@@ -117,10 +116,20 @@ function toggleExercise(card) {
 =========================== */
 
 document.getElementById("btnSave").onclick = async () => {
+    const response = await fetch(`/api-logic/template-use/${templateId}`, {
+        method: "POST",
+        headers:{
+            "Content-Type": "application/json"
+        }
+    });
+    const data = await response.json();
+
     const payload = {
+        template_id: data.result[0].id,
         name: workoutName.value,
         exercises: []
     };
+
 
     document.querySelectorAll(".exercise-card").forEach(card => {
         const active = card.dataset.active === "true";
@@ -146,7 +155,6 @@ document.getElementById("btnSave").onclick = async () => {
         },
         body: JSON.stringify(payload)
     });
-
     window.location.href = "/home"
 };
 

@@ -18,7 +18,7 @@ import routerLogic from "./src/routes/router.logic.js"
 import session from "express-session";
 import "./src/models/associations.js";
 
-// reconstruir __dirname en ESM
+// Rebuild __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -39,7 +39,7 @@ const delay = slowDown({
 
 
 //config helmet
-// CSP y COEP desactivados porque EJS usa inline scripts/styles
+// CSP and COEP disable because EJS uses inline scripts/styles
 const configHel = {
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
@@ -57,7 +57,7 @@ const configCors = {
     if (!origin || allowed.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Origen no permitido por Cors"))
+      callback(new Error("origin not allowed by CORS"))
     }
   },
   methods: ["GET", "POST", "DELETE", "PATCH", "PUT"],

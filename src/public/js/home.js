@@ -20,7 +20,11 @@ function switchTab(element, view) {
   }, 200);
 }
 
-//vista: plantillas
+//function to redirect to statistics
+function statics(){
+
+}
+//views: templates
 async function renderTemplates() {
   const listView = document.getElementById("listView");
 
@@ -55,7 +59,7 @@ async function renderTemplates() {
   }
 }
 
-// vista: historial
+// views: history
 async function renderHistory() {
   const listView = document.getElementById("listView");
 
@@ -77,7 +81,6 @@ async function renderHistory() {
       hour: "2-digit",
       minute: "2-digit"
     })
-    console.log(dateFormater)
 
     data.data.forEach(session => {
       const div = document.createElement("div");
@@ -90,6 +93,10 @@ async function renderHistory() {
       `;
 
       listView.appendChild(div);
+
+      div.addEventListener("click", async ()=>{
+        window.location.href = `/home/history/statistics/${session.template_id}`
+      })
     });
 
   } catch (err) {
@@ -97,55 +104,7 @@ async function renderHistory() {
   }
 }
 
-//vista: estadistica
-async function renderStats() {
-  const listView = document.getElementById("listView");
-
-  listView.innerHTML = `
-    <div class="stats-card">
-      <canvas id = "chart" with="300" heigth="300"></canvas>
-    </div>
-  `;
-  const ctx = document.getElementById('chart');
-  const data = [
-    { year: 2010, count: 10 },
-    { year: 2011, count: 20 },
-    { year: 2012, count: 15 },
-    { year: 2013, count: 25 },
-    { year: 2014, count: 22 },
-    { year: 2015, count: 30 },
-    { year: 2016, count: 28 },
-  ];
-
-  new Chart(ctx, {
-    type: 'li',
-    data: {
-      labels: data.map(row => row.year),
-      datasets: [{
-        label: '# of Votes',
-        data: data.map(row => row.count),
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      },
-      animation:true,
-      plugins:{
-        display: true
-      },
-      tooltip:{
-        enabled: true
-      }
-    }
-  });
-}
-
-
-// carga inicial
+// initial load
 document.addEventListener("DOMContentLoaded", () => {
   renderTemplates();
 });

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { add, showHistory, showTemplate, templateUsed } from "../controller/controller.logic.js";
+import { add, showHistory, showStatics, showTemplate, templateUsed } from "../controller/controller.logic.js";
 import { createSessionController, deleteExerciseController, newTemplate } from "../controller/controller.logic.js";
 import { authMiddleware } from "../controller/controller.auth.js";
 
@@ -12,5 +12,6 @@ router.post("/new-template", authMiddleware, newTemplate)
 router.post("/show-template",authMiddleware, showTemplate)
 router.post("/template-use/:id", authMiddleware, templateUsed)
 router.post("/show-history", authMiddleware, showHistory)
+router.post("/statics", authMiddleware, showStatics)
 
 export default router 

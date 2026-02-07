@@ -22,6 +22,10 @@ export const workout_session = sequelize.define("WorkoutSession",{
     deleted_at:{
         type: DataTypes.BOOLEAN,
         allowNull: true
+    },
+    template_id:{
+        type: DataTypes.INTEGER,
+        default: 0
     }
 },{
     tableName: "workout_session",

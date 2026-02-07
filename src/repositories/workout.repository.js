@@ -7,13 +7,14 @@ import { templateExercises } from "../models/template.exercises.js";
 import { templateSets } from "../models/template.sets.js";
 import { Sequelize } from "sequelize";
 
-export const createWorkoutSession = async (userId, Exercises) => {
+export const createWorkoutSession = async (userId, Exercises, templateId) => {
   const transaction = await sequelize.transaction();
+  console.log(Exercises[0].sets)
 
   try {
     // CREAR SESIÓN
     const session = await workout_session.create(
-      { user_id: userId, date: new Date() },
+      { user_id: userId, date: new Date(), template_id: templateId},
       { transaction }
     );
 
@@ -22,7 +23,7 @@ export const createWorkoutSession = async (userId, Exercises) => {
       user_id: userId,
       session_id: session.id,
       name: ex.exercise,
-      created_at: new Date()
+      created_at: new Date(),
     }));
 
     const createdExercises = await exercises.bulkCreate(
@@ -87,35 +88,35 @@ export const sessions = async (userId) => {
   try {
     const data = await workout_session.findAll({
       where: {
-        user_id: userId
+        user_id: userId,
       },
       attributes: [
         "id",
         "created_at",
+        "template_id",
 
         [
           sequelize.literal(`(
-        SELECT COUNT(*)
-        FROM exercises e
-        WHERE e.session_id = WorkoutSession.id
-      )`),
-          "exercises_number"
+      SELECT COUNT(*)
+      FROM exercises e
+      WHERE e.session_id = WorkoutSession.id
+    )`),
+          "exercises_number",
         ],
 
         [
           sequelize.literal(`(
-        SELECT SUM(wst.set_number)
-        FROM workout_sets wst
-        WHERE wst.session_id = WorkoutSession.id
-      )`),
-          "volum"
-        ]
+      SELECT SUM(wst.set_number)
+      FROM workout_sets wst
+      WHERE wst.session_id = WorkoutSession.id
+    )`),
+          "volum",
+        ],
       ],
       order: [["created_at", "DESC"]],
+    });
 
-    })
-
-    return data
+    return data;
   } catch (error) {
     console.error(error);
   }

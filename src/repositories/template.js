@@ -50,6 +50,7 @@ export const createTemplate = async (user_id, name, Exercises) => {
     }
 }
 
+//data for the history
 export const getDataTemplate = async (userId) => {
     try {
         const workouts = await templateWorkout.findAll({
@@ -72,3 +73,4 @@ export const getDataTemplate = async (userId) => {
         console.error(error)
     }
 }
+

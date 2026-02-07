@@ -56,6 +56,9 @@ exercises.hasMany(workout_sets,{
     foreignKey: "exercise_id"
 })
 
+workout_session.belongsTo(templateWorkout,{
+    foreignKey: "template_id"
+})
 
 //template
 users.hasMany(templateWorkout,{
@@ -86,6 +89,10 @@ templateSets.belongsTo(templateExercises,{
     targetKey: "id"
 })
 
+templateWorkout.hasMany(
+    workout_session,
+    {foreignKey: "template_id"}
+)
 
 export {
     exercises,
